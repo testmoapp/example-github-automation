@@ -1,0 +1,28 @@
+name: Test
+
+on: [push, workflow_dispatch]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: npm
+      - run: npm ci
+      - run: npm install --no-save @testmo/testmo-cli
+      - run: |
+          npx testmo automation:run:submit \
+            --instance $TESTMO_URL \
+            --project-id 1 \
+            --name "Mocha test run" \
+            --source "unit-tests" \
+            --results results/*.xml \
+            -- npm run mocha-junit # Note space after --
+        env:
+          TESTMO_URL: ${{ secrets.TESTMO_URL }}
+          TESTMO_TOKEN: ${{ secrets.TESTMO_TOKEN }}
