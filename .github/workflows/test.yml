@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: 19
           cache: npm
@@ -28,14 +28,15 @@ jobs:
           npx testmo automation:resources:add-link --name build \
             --url $RUN_URL --resources resources.json
 
+      # Run automated tests and report results to Testmo
       - run: |
-          if [[ -z "${TESTMO_TOKEN}" ]]; then
-            echo "The TESTMO_TOKEN secret is not defined for this repository"
+          if [[ -z "${TESTMO_URL}" ]]; then
+            echo "The TESTMO_URL secret is not defined for this repository"
             exit 1
           fi
 
-          if [[ -z "${TESTMO_URL}" ]]; then
-            echo "The TESTMO_URL secret is not defined for this repository"
+          if [[ -z "${TESTMO_TOKEN}" ]]; then
+            echo "The TESTMO_TOKEN secret is not defined for this repository"
             exit 1
           fi
 
