@@ -28,7 +28,7 @@ jobs:
           npx testmo automation:resources:add-link --name build \
             --url $RUN_URL --resources resources.json
 
-      # Run automated tests and report results to Testmo
+      # Check if the required variables are available
       - run: |
           if [[ -z "${TESTMO_URL}" ]]; then
             echo "The TESTMO_URL secret is not defined for this repository"
@@ -39,7 +39,12 @@ jobs:
             echo "The TESTMO_TOKEN secret is not defined for this repository"
             exit 1
           fi
+        env:
+          TESTMO_URL: ${{ secrets.TESTMO_URL }}
+          TESTMO_TOKEN: ${{ secrets.TESTMO_TOKEN }}
 
+      # Run automated tests and report results to Testmo
+      - run: |
           npx testmo automation:run:submit \
             --instance "$TESTMO_URL" \
             --project-id 1 \
