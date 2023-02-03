@@ -14,7 +14,7 @@ jobs:
           node-version: 19
           cache: npm
 
-      # Skip this line if not installing your own NodeJS packages
+      # Skip this line if not installing your own Node.js packages
       - run: npm ci
 
       # Install Testmo CLI tool locally (then use npx testmo .. to run it)
